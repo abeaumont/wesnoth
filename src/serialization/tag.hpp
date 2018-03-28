@@ -45,7 +45,7 @@ protected:
 	std::string name_;
 public:
 	class_type() = delete;
-	class_type(const std::string& name) : name_(name) {}
+	explicit class_type(const std::string& name) : name_(name) {}
 	using map = std::map<std::string, std::shared_ptr<class_type>>;
 	virtual bool matches(const std::string& value, const map& type_map) const = 0;
 	static std::shared_ptr<class_type> from_config(const config& cfg);
@@ -82,7 +82,7 @@ class class_type_composite : public class_type {
 protected:
 	std::vector<std::shared_ptr<class_type>> subtypes_;
 public:
-	class_type_composite(const std::string& name) : class_type(name) {}
+	explicit class_type_composite(const std::string& name) : class_type(name) {}
 	void add_type(std::shared_ptr<class_type> type)
 	{
 		subtypes_.push_back(type);
@@ -95,7 +95,7 @@ public:
  */
 class class_type_union : public class_type_composite {
 public:
-	class_type_union(const std::string& name) : class_type_composite(name) {}
+	explicit class_type_union(const std::string& name) : class_type_composite(name) {}
 	bool matches(const std::string& value, const map& type_map) const override;
 };
 
@@ -105,7 +105,7 @@ public:
  */
 class class_type_intersection : public class_type_composite {
 public:
-	class_type_intersection(const std::string& name) : class_type_composite(name) {}
+	explicit class_type_intersection(const std::string& name) : class_type_composite(name) {}
 	bool matches(const std::string& value, const map& type_map) const override;
 };
 
